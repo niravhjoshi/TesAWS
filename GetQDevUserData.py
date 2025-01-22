@@ -16,7 +16,7 @@ class CodeWhispererUserManager:
         response = self.sso_admin_client.list_instances()
         return response['Instances'][0]['IdentityStoreId']
 
-    def get_user_details(self, user_id: str) -> dict:
+    def get_user_details(self, user_id: str,last_act_date: str) -> dict:
         """Get user details from Identity Store"""
         try:
             response = self.identity_store_client.describe_user(
@@ -27,7 +27,8 @@ class CodeWhispererUserManager:
                 'UserId': user_id,
                 'Username': response.get('UserName'),
                 'Email': response.get('Emails', [{}])[0].get('Value'),
-                'DisplayName': response.get('DisplayName')
+                'DisplayName': response.get('DisplayName'),
+                "LastActivityDate":last_act_date
             }
         except Exception as e:
             print(f"Error getting details for user {user_id}: {str(e)}")
@@ -46,15 +47,16 @@ class CodeWhispererUserManager:
                 for row in csv_reader:
                     if row:  # Check if row is not empty
                         user_id = row[0].strip()  # Assuming UserID is in first column
-                        user_details = self.get_user_details(user_id)
+                        latest_activity_date = row[1] #second date column
+                        user_details = self.get_user_details(user_id,latest_activity_date)
+                        print(user_details)
                         user_details_list.append(user_details)
-                        
         except FileNotFoundError:
             print(f"Error: CSV file not found at {csv_file_path}")
         except Exception as e:
             print(f"Error processing CSV file: {str(e)}")
             traceback.print_exc()
-            
+        # print (user_details_list)    
         return user_details_list
 
     def get_codewhisperer_users(self, application_arn: str) -> Set[dict]:
@@ -112,14 +114,14 @@ def main():
     # Get and display users
     users = manager.get_users_from_csv(csv_file_path)
     
-    print("\nUser Details:")
-    print("-------------------")
+    # print("\nUser Details:")
+    # print("-------------------")
     
     # Create output CSV file
     output_file_path = "user_details_output.csv"
     try:
         with open(output_file_path, 'w', newline='') as output_file:
-            fieldnames = ['UserId', 'Username', 'Email', 'DisplayName']
+            fieldnames = ['UserId', 'Username', 'Email', 'DisplayName','LastActivityDate']
             writer = csv.DictWriter(output_file, fieldnames=fieldnames)
             
             # Write header
@@ -128,11 +130,11 @@ def main():
             # Write user details and print to console
             for user in users:
                 writer.writerow(user)
-                print(f"User ID: {user.get('UserId')}")
-                print(f"Username: {user.get('Username')}")
-                print(f"Email: {user.get('Email')}")
-                print(f"Display Name: {user.get('DisplayName')}")
-                print("-------------------")
+                # print(f"User ID: {user.get('UserId')}")
+                # print(f"Username: {user.get('Username')}")
+                # print(f"Email: {user.get('Email')}")
+                # print(f"Display Name: {user.get('DisplayName')}")
+                # print("-------------------")
                 
         print(f"\nResults have been saved to {output_file_path}")
         
