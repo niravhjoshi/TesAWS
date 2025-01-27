@@ -78,7 +78,7 @@ def main():
     
     # Replace with your actual Amazon Q Developer application ARN
     #application_arn = "arn:aws:sso::ACCOUNT_ID:application/ssoins-XXXXX/apl-XXXXX"
-    application_arn = "arn:aws:sso::985539799335:application/ssoins-722359b9176d9db1/apl-434808f3de7d043d"
+    application_arn = "arn:aws:sso::1234535:application/ssoins-xxxx/apl-xxxxx"
     
     # Get and display users
     result = manager.get_group_users(application_arn)
