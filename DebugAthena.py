@@ -10,14 +10,14 @@ from botocore.exceptions import ClientError
 
 # AWS Configuration
 region = 'us-east-1'  # Replace with your AWS region
-athena_output_location = 's3://awss3-awsdevq-promptlog/devqpromptlog/AWSLogs/985539799335/QDeveloperLogs/by_user_analytic/'  # Replace with your S3 bucket
+athena_output_location = 's3://1234555/QDeveloperLogs/by_user/'  # Replace with your S3 bucket
 database = 'amazon_q_metrics'  # Replace with your Athena database name
 
 # Email Configuration
-smtp_server = 'smtp.gmail.com'  # Replace with your SMTP server
+smtp_server = 'smtp.abc123.com'  # Replace with your SMTP server
 smtp_port = 465  # Standard port for TLS
-sender_email = 'nirav.j05@gmail.com'  # Replace with sender email
-receiver_email = 'niravj@amazon.com'  # Replace with recipient email
+sender_email = 'nirav@exampl.com'  # Replace with sender email
+receiver_email = 'niravj@world.com'  # Replace with recipient email
 email_password = '373777'  # Replace with email password or app password
 
 
